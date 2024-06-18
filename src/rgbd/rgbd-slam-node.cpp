@@ -8,11 +8,14 @@ RgbdSlamNode::RgbdSlamNode(ORB_SLAM3::System* pSLAM)
 :   Node("ORB_SLAM3_ROS2"),
     m_SLAM(pSLAM)
 {
-    rgb_sub = std::make_shared<message_filters::Subscriber<ImageMsg> >(shared_ptr<rclcpp::Node>(this), "camera/rgb");
-    depth_sub = std::make_shared<message_filters::Subscriber<ImageMsg> >(shared_ptr<rclcpp::Node>(this), "camera/depth");
+    std::cout << "============================ " << std::endl;
+    rgb_sub = std::make_shared<message_filters::Subscriber<ImageMsg> >(this, "/camera/rgb");
+    depth_sub = std::make_shared<message_filters::Subscriber<ImageMsg> >(this, "/camera/depth");
+    std::cout << "============================ " << std::endl;
 
     syncApproximate = std::make_shared<message_filters::Synchronizer<approximate_sync_policy> >(approximate_sync_policy(10), *rgb_sub, *depth_sub);
     syncApproximate->registerCallback(&RgbdSlamNode::GrabRGBD, this);
+    std::cout << "============================ " << std::endl;
 
 }
 
